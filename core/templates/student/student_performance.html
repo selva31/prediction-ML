@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Welcome, {{ current_user.username }}!</h2>
+
+<h3>Your Performance Records:</h3>
+
+{% if performances %}
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>ID</th>
+            <th>Score</th>
+            <th>Grade</th>
+            <th>Date</th>
+        </tr>
+        {% for record in performances %}
+        <tr>
+            <td>{{ record.id }}</td>
+            <td>{{ record.score }}</td>
+            <td>{{ record.grade }}</td>
+            <td>{{ record.created_at.strftime('%Y-%m-%d') }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <p>No performance records available.</p>
+{% endif %}
+
+{% endblock %}

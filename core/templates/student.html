@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container">
+    <h2>Welcome, {{ current_user.username }}!</h2>
+
+    <h3>Your Performance Overview</h3>
+    <div class="performance-container">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Score</th>
+            <th>Predicted Category</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for performance in performances %}
+            <tr>
+              <td>{{ performance.date }}</td>
+              <td>{{ performance.score }}</td>
+              <td>{{ performance.prediction_category }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Visualize Student Progress -->
+    <h3>Your Progress Chart</h3>
+    <div id="chart-container">
+      <canvas id="progressChart" width="400" height="200"></canvas>
+    </div>
+  </div>
+
+  <script>
+    // Prepare the data for Chart.js
+    var performanceData = {
+      labels: [{% for performance in performances %}'{{ performance.date }}', {% endfor %}],
+      datasets: [{
+        label: 'Student Scores',
+        data: [{% for performance in performances %}{{ performance.score }}, {% endfor %}],
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1,
+        fill: false
+      }]
+    };
+
+    // Create the chart using Chart.js
+    var ctx = document.getElementById('progressChart').getContext('2d');
+    var progressChart = new Chart(ctx, {
+      type: 'line', // Line chart to track progress
+      data: performanceData,
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    <canvas id="progressChart" width="400" height="200"></canvas>
+
+  const ctx = document.getElementById('progressChart').getContext('2d');
+  const progressChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['Test 1', 'Test 2', 'Test 3'],
+      datasets: [{
+        label: 'Score',
+        data: [65, 72, 80],
+        borderColor: 'rgba(75, 192, 192, 1)',
+        fill: false,
+        tension: 0.1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+
+
+  </script>
+{% endblock %}

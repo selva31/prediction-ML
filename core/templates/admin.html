@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container">
+    <h2>Welcome, Admin</h2>
+
+    <h3>Manage Users</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Role</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+          <tr>
+            <td>{{ user.username }}</td>
+            <td>{{ user.role }}</td>
+            <td>
+              <a href="{{ url_for('admin.delete_user', user_id=user.id) }}" class="btn btn-danger">Delete</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <h3>Application Stats</h3>
+    <div>
+      <p>Total Students: {{ total_students }}</p>
+      <p>Total Teachers: {{ total_teachers }}</p>
+      <p>Total Predictions: {{ total_predictions }}</p>
+    </div>
+  </div>
+{% endblock %}

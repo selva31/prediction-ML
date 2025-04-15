@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head><title>Progress</title></head>
+<body>
+  <h2>Progress Tracker</h2>
+  <table border="1">
+    <tr><th>Name</th><th>Score</th><th>Category</th></tr>
+    {% for row in data %}
+    <tr><td>{{ row.student_name }}</td><td>{{ row.score }}</td><td>{{ row.category }}</td></tr>
+    {% endfor %}
+  </table>
+</body>
+</html>

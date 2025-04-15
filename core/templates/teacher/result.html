@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prediction Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <h2>Student Performance Predictions</h2>
+
+    {% if predictions %}
+    <table border="1">
+        <tr>
+            <th>Student ID</th>
+            <th>Score</th>
+            <th>Grade</th>
+        </tr>
+        {% for pred in predictions %}
+        <tr>
+            <td>{{ pred.student_id }}</td>
+            <td>{{ pred.score }}</td>
+            <td>{{ pred.grade }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+        <p>No predictions found.</p>
+    {% endif %}
+</body>
+</html>

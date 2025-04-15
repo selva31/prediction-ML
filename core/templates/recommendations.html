@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head><title>Recommendations</title></head>
+<body>
+  <h2>Study Recommendations</h2>
+  {% for rec in recommendations %}
+    <h3>{{ rec.name }}</h3>
+    <p>Weak areas: {{ rec.weak_areas }}</p>
+    <ul>
+      {% for res in rec.resources %}
+      <li><a href="{{ res }}" target="_blank">{{ res }}</a></li>
+      {% endfor %}
+    </ul>
+  {% endfor %}
+</body>
+</html>

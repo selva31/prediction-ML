@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html>
+<head><title>Dashboard</title></head>
+<body>
+  <h2>Welcome {{ user.username }}</h2>
+  <a href="{{ url_for('main.upload') }}">Upload Student Scores</a><br>
+  <a href="{{ url_for('main.results') }}">View Results</a>
+</body>
+</html>
