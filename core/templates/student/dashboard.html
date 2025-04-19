@@ -1,52 +1,42 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card p-4 shadow-sm">
+            <h3 class="mb-4 text-center">Welcome, {{ student.username }}!</h3>
+            <p><strong>Email:</strong> {{ student.email }}</p>
+            <p><strong>Roll No:</strong> {{ student_detail.roll_no }}</p>
 
-{% block content %}
-<h2>Your Performance Overview</h2>
+            <h5>Performance Records</h5>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Score</th>
+                        <th>Grade</th>
+                        <th>Created At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for performance in performance_records %}
+                        <tr>
+                            <td>{{ performance.score }}</td>
+                            <td>{{ performance.grade }}</td>
+                            <td>{{ performance.created_at }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
 
-<table border="1">
-  <tr>
-    <th>Score</th>
-    <th>Grade</th>
-    <th>Date</th>
-  </tr>
-  {% for p in performances %}
-  <tr>
-    <td>{{ p.score }}</td>
-    <td>{{ p.grade }}</td>
-    <td>{{ p.created_at.strftime('%Y-%m-%d') }}</td>
-  </tr>
-  {% endfor %}
-</table>
+            <a href="{{ url_for('student.logout') }}" class="btn btn-danger w-100">Logout</a>
+        </div>
+    </div>
 
-<!-- Chart.js Canvas -->
-<canvas id="performanceChart" width="400" height="200"></canvas>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-  // Prepare the labels and data arrays
-  const labels = {{ performances | map(attribute='created_at.strftime("%Y-%m-%d")') | list }};
-  const scores = {{ performances | map(attribute='score') | list }};
-
-  // Chart.js Data Configuration
-  const data = {
-    labels: labels,
-    datasets: [{
-      label: 'Performance Over Time',
-      data: scores,
-      backgroundColor: 'rgba(54, 162, 235, 0.2)',
-      borderColor: 'rgb(54, 162, 235)',
-      borderWidth: 2
-    }]
-  };
-
-  // Chart Configuration
-  const config = {
-    type: 'line', // You can also change this to 'bar' or 'radar'
-    data: data,
-  };
-
-  // Render the chart in the canvas element
-  new Chart(document.getElementById('performanceChart'), config);
-</script>
-
-{% endblock %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

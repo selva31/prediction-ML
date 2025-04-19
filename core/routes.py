@@ -50,4 +50,4 @@ def upload():
             return render_template('results.html', predictions=predictions)
         else:
             flash("Invalid file format. Please upload a CSV file.", "danger")
-    return render_template("upload.html")
+    return render_template("upload_performance.html")

@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Student Performance Overview</h2>
+
+    <!-- Filters for Student Name and Grade -->
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label for="studentNameFilter">Filter by Student Name</label>
+            <input type="text" id="studentNameFilter" class="form-control" placeholder="Search by Student Name">
+        </div>
+        <div class="col-md-6">
+            <label for="gradeFilter">Filter by Grade</label>
+            <select id="gradeFilter" class="form-control">
+                <option value="">All Grades</option>
+                <option value="Low">Low</option>
+                <option value="Average">Average</option>
+                <option value="Good">Good</option>
+                <option value="Excellent">Excellent</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Chart for Grade Distribution -->
+    <div class="row">
+        <div class="col-md-8">
+            <canvas id="gradeChart"></canvas>
+        </div>
+        <div class="col-md-4">
+            <!-- Performance Summary -->
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    Performance Summary
+                </div>
+                <div class="card-body">
+                    <ul>
+                        <li><strong>Total Students:</strong> {{ performance_records|length }}</li>
+                        <li><strong>Low Performance:</strong> {{ grade_counts['Low'] }}</li>
+                        <li><strong>Average Performance:</strong> {{ grade_counts['Average'] }}</li>
+                        <li><strong>Good Performance:</strong> {{ grade_counts['Good'] }}</li>
+                        <li><strong>Excellent Performance:</strong> {{ grade_counts['Excellent'] }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table for Student Performance -->
+    <div class="card mt-4">
+        <div class="card-header bg-success text-white">
+            Performance Records
+        </div>
+        <div class="card-body">
+            <table class="table table-striped table-bordered" id="performanceTable">
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Score</th>
+                        <th>Grade</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in performance_records %}
+                    <tr class="performance-row" data-name="{{ record.name }}" data-grade="{{ record.grade }}">
+                        <td>{{ record.name }}</td>
+                        <td>{{ record.score }}</td>
+                        <td>
+<!--                            <span class="badge-->
+<!--                            {% if record.grade == 'Low' %}badge-danger{% elif record.grade == 'Average' %}badge-warning{% elif record.grade == 'Good' %}badge-info{% else %}badge-success{% endif %}">-->
+                                {{ record.grade }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Export Options -->
+    <div class="mt-4">
+        <button class="btn btn-primary" id="downloadChartBtn">Export Chart as Image</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+    const gradeCounts = {
+        Low: {{ grade_counts['Low'] }},
+        Average: {{ grade_counts['Average'] }},
+        Good: {{ grade_counts['Good'] }},
+        Excellent: {{ grade_counts['Excellent'] }}
+    };
+
+    const ctx = document.getElementById('gradeChart').getContext('2d');
+    const gradeChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Low', 'Average', 'Good', 'Excellent'],
+            datasets: [{
+                label: 'Number of Students',
+                data: [gradeCounts.Low, gradeCounts.Average, gradeCounts.Good, gradeCounts.Excellent],
+                backgroundColor: ['#dc3545', '#ffc107', '#17a2b8', '#28a745'],
+                borderColor: ['#dc3545', '#ffc107', '#17a2b8', '#28a745'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Filter by Student Name
+    document.getElementById('studentNameFilter').addEventListener('input', function() {
+        let searchTerm = this.value.toLowerCase();
+        let rows = document.querySelectorAll('.performance-row');
+        rows.forEach(row => {
+            let studentName = row.dataset.name.toLowerCase();
+            if (studentName.includes(searchTerm)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+
+    // Filter by Grade
+    document.getElementById('gradeFilter').addEventListener('change', function() {
+        let selectedGrade = this.value.toLowerCase();
+        let rows = document.querySelectorAll('.performance-row');
+        rows.forEach(row => {
+            let grade = row.dataset.grade.toLowerCase();
+            if (selectedGrade === '' || grade === selectedGrade) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+
+    // Export chart as image
+    document.getElementById('downloadChartBtn').addEventListener('click', function() {
+        const img = gradeChart.toBase64Image();
+        const link = document.createElement('a');
+        link.href = img;
+        link.download = 'student_performance_chart.png';
+        link.click();
+    });
+</script>
+{% endblock %}

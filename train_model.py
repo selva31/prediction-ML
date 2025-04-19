@@ -1,32 +1,31 @@
+import os
 import pandas as pd
-from sklearn.tree import DecisionTreeClassifier
+import joblib
+from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
-import pickle
 
-# Load your dataset
-df = pd.read_csv('C:/Users/selva/Downloads/student_performance_data.csv')  # Make sure to adjust the file path
+# Get the directory of the current script file (train_model.py)
+base_dir = os.path.abspath(os.path.dirname(__file__))
 
-# Step 2: Preprocess (Assuming 'score', 'attendance' are features, and 'grade' is the label)
-df = df.dropna()  # Remove rows with missing values
-X = df[['score', 'attendance']]  # Feature columns
-y = df['grade']  # Target label
+# Load your training dataset (you must have this prepared)
+df = pd.read_csv(os.path.join(base_dir, 'data', 'semester_scores.csv'))  # Example path
 
-# Optional: Convert grades to numeric if needed
-# from sklearn.preprocessing import LabelEncoder
-# le = LabelEncoder()
-# y = le.fit_transform(y)
+# Example columns: roll_no, name, internal_1, internal_2, internal_3, sem1_mark, sem2_mark, sem3_mark, attendance_1, attendance_2, attendance_3
 
-# Step 3: Split data
+# Features for training
+X = df[['internal_1', 'internal_2', 'sem1_mark', 'sem2_mark', 'attendance_1', 'attendance_2']]
+y = df['sem3_mark']
+
+# Train/test split (optional)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Step 4: Train model
-model = RandomForestClassifier()
+# Train the model
+model = LinearRegression()
 model.fit(X_train, y_train)
 
-# Step 5: Evaluate
-y_pred = model.predict(X_test)
-print("Accuracy:", accuracy_score(y_test, y_pred))
+# Define the path to save the model
+model_path = os.path.join(base_dir, 'ml_models', 'sem3_predictor.pkl')
 
-# Step 6: Save the model
-joblib.dump(model, 'ml_model.pkl')
-print("Model saved as ml_model.pkl")
+# Save the model
+joblib.dump(model, model_path)
+print(f"Model trained and saved as {model_path}")

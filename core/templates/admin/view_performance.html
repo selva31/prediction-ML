@@ -1,0 +1,22 @@
+<!-- templates/admin/view_performance.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Performance Records</h2>
+<table border="1">
+  <tr>
+    <th>Student Name</th>
+    <th>Score</th>
+    <th>Grade</th>
+    <th>Date</th>
+  </tr>
+  {% for record in performance_records %}
+  <tr>
+    <td>{{ record.student.username }}</td>
+    <td>{{ record.score }}</td>
+    <td>{{ record.grade }}</td>
+    <td>{{ record.created_at.strftime('%Y-%m-%d') }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}
