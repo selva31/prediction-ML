@@ -24,14 +24,14 @@ def upgrade():
                existing_type=sa.VARCHAR(length=20),
                type_=sa.String(length=50),
                existing_nullable=False)
-        batch_op.create_foreign_key(None, 'user', ['user_id'], ['id'])
+        batch_op.create_foreign_key('fk_student_user', 'user', ['user_id'], ['id'])
         batch_op.drop_column('name')
         batch_op.drop_column('phone')
         batch_op.drop_column('email')
 
     with op.batch_alter_table('teacher_detail', schema=None) as batch_op:
         batch_op.add_column(sa.Column('user_id', sa.Integer(), nullable=False))
-        batch_op.create_foreign_key(None, 'user', ['user_id'], ['id'])
+        batch_op.create_foreign_key('fk_teacher_user', 'user', ['user_id'], ['id'])
         batch_op.drop_column('name')
         batch_op.drop_column('phone')
         batch_op.drop_column('email')

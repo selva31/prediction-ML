@@ -105,6 +105,28 @@ def view_teacher():
     teachers = User.query.filter_by(role='Teacher').all()  # Fetch all teachers
     return render_template('admin/view_teacher.html', teachers=teachers)
 
+@admin_bp.route('/edit_teacher/<int:teacher_id>', methods=['GET', 'POST'])
+def edit_teacher(teacher_id):
+    teacher = Teacher.query.get_or_404(teacher_id)
+    if request.method == 'POST':
+        teacher.name = request.form['name']
+        teacher.email = request.form['email']
+        # teacher.phone = request.form['phone']
+        db.session.commit()
+        flash('Teacher details updated successfully.', 'success')
+        return redirect(url_for('admin.view_teacher'))
+    return render_template('admin.edit_teacher.html', teacher=teacher)
+
+
+@admin_bp.route('/delete_teacher/<int:teacher_id>')
+def delete_teacher(teacher_id):
+    teacher = Teacher.query.get_or_404(teacher_id)
+    db.session.delete(teacher)
+    db.session.commit()
+    flash('Teacher deleted successfully.', 'success')
+    return redirect(url_for('admin.view_teacher'))
+
+
 # View Students
 @admin_bp.route('/admin/view_student', methods=['GET', 'POST'])
 def view_student():
@@ -123,7 +145,7 @@ def view_student():
 @login_required
 def edit_student(student_id):
     if current_user.role != 'Admin':
-        return redirect(url_for('main.index'))  # Redirect non-admins
+        return redirect(url_for('main.home'))  # Redirect non-admins
 
     student = User.query.get_or_404(student_id)
     form = AddStudentForm(obj=student)
@@ -141,7 +163,7 @@ def edit_student(student_id):
 @login_required
 def delete_student(student_id):
     if current_user.role != 'Admin':
-        return redirect(url_for('main.index'))  # Redirect non-admins
+        return redirect(url_for('main.home'))  # Redirect non-admins
 
     student = User.query.get_or_404(student_id)
     db.session.delete(student)
@@ -153,7 +175,7 @@ def delete_student(student_id):
 @login_required
 def view_performance():
     if current_user.role != 'Admin':
-        return redirect(url_for('main.index'))  # Redirect non-admins
+        return redirect(url_for('main.home'))  # Redirect non-admins
 
     performance_records = Performance.query.all()
     return render_template('admin/view_performance.html', performance_records=performance_records)

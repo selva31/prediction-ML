@@ -12,7 +12,7 @@
   </tr>
   {% for record in performance_records %}
   <tr>
-    <td>{{ record.student.username }}</td>
+    <td>{{ record.username }}</td>
     <td>{{ record.score }}</td>
     <td>{{ record.grade }}</td>
     <td>{{ record.created_at.strftime('%Y-%m-%d') }}</td>

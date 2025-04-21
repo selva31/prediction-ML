@@ -25,8 +25,9 @@ def create_app():
     app.config['MAIL_SERVER'] = 'smtp.gmail.com'
     app.config['MAIL_PORT'] = 587
     app.config['MAIL_USE_TLS'] = True
-    app.config['MAIL_USERNAME'] = 'santhoshkumar@gmail.com'  # Replace with your email
-    app.config['MAIL_PASSWORD'] = 'password'  # Replace with your app password
+    app.config['MAIL_USERNAME'] = 'selvaqueen333@gmail.com'  # Replace with your email
+    app.config['MAIL_PASSWORD'] = 'rrlg kmrz wnff djuf'  # Replace with your app password
+    app.config['MAIL_DEFAULT_SENDER'] = 'selvaqueen333@gmail.com'  #
 
     # Initialize extensions
     db.init_app(app)

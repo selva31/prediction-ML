@@ -10,15 +10,15 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(256), nullable=False)
     role = db.Column(db.String(50), nullable=False)  # Student/Teacher/Admin
     roll_no = db.Column(db.String(50))  # For students
-    phone = db.Column(db.String(20))  # Optional: for contact
+    phone = db.Column(db.String(20))  # Optional
+    attendance = db.Column(db.Float, nullable=True)  # Overall attendance %
 
     def check_password(self, password):
-        """Check if the provided password matches the hashed password"""
         return check_password_hash(self.password, password)
 
 class Performance(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    student_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Foreign key to User table
+    student_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     score = db.Column(db.Float, nullable=False)
     grade = db.Column(db.String(20), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
@@ -28,13 +28,13 @@ class Performance(db.Model):
 
 class StudentDetail(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Link to User table
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     roll_no = db.Column(db.String(50), unique=True, nullable=False)
     user = db.relationship('User', backref='student_detail', lazy=True)
 
 class TeacherDetail(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Link to User table
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship('User', backref='teacher_detail', lazy=True)
 
 class PerformanceRecord(db.Model):
@@ -43,5 +43,7 @@ class PerformanceRecord(db.Model):
     name = db.Column(db.String(100), nullable=False)
     grade = db.Column(db.String(10), nullable=False)
     score = db.Column(db.Float, nullable=False)
+    attendance = db.Column(db.Integer, nullable=True)
+
 
     student = db.relationship('User', backref='performance_records')
