@@ -1,18 +1,33 @@
 {% extends 'base.html' %}
+
 {% block content %}
 <div class="container mt-5">
-    <h3>Edit Teacher Details</h3>
-    <form method="POST">
-        <div class="mb-3">
-            <label>Name</label>
-            <input type="text" name="name" class="form-control" value="{{ teacher.name }}" required>
-        </div>
-        <div class="mb-3">
-            <label>Email</label>
-            <input type="email" name="email" class="form-control" value="{{ teacher.email }}" required>
-        </div>
-        <button type="submit" class="btn btn-success">Update</button>
-        <a href="{{ url_for('admin.view_teacher') }}" class="btn btn-secondary">Cancel</a>
-    </form>
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow-lg border-0 rounded-3 p-4">
+        <h3 class="text-center text-primary mb-4">Edit Teacher Details</h3>
+
+        <form method="POST" action="{{ url_for('admin.edit_teacher', teacher_id=teacher.id) }}">
+          <div class="mb-3">
+            <label for="username" class="form-label">Teacher Name</label>
+            <input type="text" class="form-control" name="username" id="username" value="{{ teacher.username }}" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label">Email Address</label>
+            <input type="email" class="form-control" name="email" id="email" value="{{ teacher.email }}" required>
+          </div>
+          <div class="text-center mt-4">
+            <button type="submit" class="btn btn-success px-4">
+              <i class="fas fa-save me-1"></i> Update
+            </button>
+            <a href="{{ url_for('admin.view_teacher') }}" class="btn btn-secondary ms-3">
+              Cancel
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

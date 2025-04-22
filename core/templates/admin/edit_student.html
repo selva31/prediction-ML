@@ -1,14 +1,37 @@
-<!-- templates/admin/edit_student.html -->
 {% extends 'base.html' %}
-
 {% block content %}
-<h2>Edit Student</h2>
-<form method="POST" action="{{ url_for('admin.edit_student', student_id=student.id) }}">
-    {{ form.hidden_tag() }}
-    <p>{{ form.username.label }} {{ form.username() }}</p>
-    <p>{{ form.email.label }} {{ form.email() }}</p>
-    <p>{{ form.roll_no.label }} {{ form.roll_no() }}</p>
-    <p>{{ form.phone.label }} {{ form.phone() }}</p>
-    <p><input type="submit" value="Update Student"></p>
+<div class="container mt-5">
+    <h3>Edit Student Details</h3>
+    <form method="POST" action="{{ url_for('admin.edit_student', student_id=student.id) }}">
+    <div class="mb-3">
+        <label for="username" class="form-label">Student Name</label>
+        <input type="text" class="form-control" name="username" id="username" value="{{ student.username }}" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="email" class="form-label">Email Address</label>
+        <input type="email" class="form-control" name="email" id="email" value="{{ student.email }}" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="roll_no" class="form-label">Roll Number</label>
+        <input type="text" class="form-control" name="roll_no" id="roll_no" value="{{ student.roll_no }}" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="phone" class="form-label">Phone Number</label>
+        <input type="text" class="form-control" name="phone" id="phone" value="{{ student.phone }}" required>
+    </div>
+
+    <div class="text-center mt-4">
+        <button type="submit" class="btn btn-success px-4">
+            <i class="fas fa-save me-1"></i> Update
+        </button>
+        <a href="{{ url_for('admin.view_student') }}" class="btn btn-secondary ms-3">
+            Cancel
+        </a>
+    </div>
 </form>
+
+</div>
 {% endblock %}

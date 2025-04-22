@@ -1,53 +1,361 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2 class="mb-4 text-center">Student Performance Summary</h2>
+<!-- Link to custom stylesheet -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --primary: #4361ee;
+        --primary-light: #e6e9ff;
+        --secondary: #3a0ca3;
+        --accent: #4cc9f0;
+        --danger: #f72585;
+        --warning: #f8961e;
+        --success: #38b000;
+        --light: #f8f9fa;
+        --dark: #212529;
+        --gray: #6c757d;
+        --glass-bg: rgba(255, 255, 255, 0.9);
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f5f7fb;
+    }
+
+    .performance-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .page-title {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 2rem;
+        text-align: center;
+        position: relative;
+        padding-bottom: 1rem;
+    }
+
+    .page-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+        border-radius: 2px;
+    }
+
+    .alert-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        margin-bottom: 2.5rem;
+        flex-wrap: wrap;
+    }
+
+    .btn-alert {
+        border-radius: 8px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        border: none;
+    }
+
+    .btn-alert:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    }
+
+    .btn-low-grade {
+        background: linear-gradient(135deg, #f72585, #b5179e);
+        color: white;
+    }
+
+    .btn-attendance {
+        background: linear-gradient(135deg, #f8961e, #f3722c);
+        color: white;
+    }
+
+    .card-chart {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+    .card-chart:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .card-header {
+        background: linear-gradient(135deg, var(--dark), #343a40);
+        color: white;
+        font-weight: 600;
+        border-radius: 12px 12px 0 0 !important;
+        padding: 1rem 1.5rem;
+        border: none;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    .filter-card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        padding: 1.5rem;
+        height: 100%;
+    }
+
+    .summary-card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        height: 100%;
+    }
+
+    .summary-header {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        font-weight: 600;
+        border-radius: 12px 12px 0 0 !important;
+        padding: 1rem 1.5rem;
+        border: none;
+    }
+
+    .form-control, .form-select {
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        border: 1px solid #e9ecef;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.15);
+    }
+
+    .summary-list {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .summary-list li {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #f1f3f5;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .summary-list li:last-child {
+        border-bottom: none;
+    }
+
+    .table-section {
+        margin-top: 3rem;
+    }
+
+    .table-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--dark);
+        margin-bottom: 1.5rem;
+        text-align: center;
+        position: relative;
+    }
+
+    .table-title::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 3px;
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+        border-radius: 2px;
+    }
+
+    .performance-table {
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    }
+
+    .table thead th {
+        background: linear-gradient(135deg, var(--dark), #343a40);
+        color: white;
+        font-weight: 500;
+        padding: 1rem;
+        border: none;
+    }
+
+    .table tbody tr {
+        transition: all 0.2s ease;
+    }
+
+    .table tbody tr:hover {
+        background-color: #f8fafc;
+        transform: translateY(-1px);
+    }
+
+    .table td {
+        vertical-align: middle;
+        padding: 1rem;
+        border-color: #f1f3f5;
+    }
+
+    .grade-badge {
+        padding: 0.5rem 0.75rem;
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 0.85rem;
+    }
+
+    .grade-excellent {
+        background-color: rgba(46, 204, 113, 0.15);
+        color: #2ecc71;
+    }
+
+    .grade-good {
+        background-color: rgba(52, 152, 219, 0.15);
+        color: #3498db;
+    }
+
+    .grade-average {
+        background-color: rgba(241, 196, 15, 0.15);
+        color: #f1c40f;
+    }
+
+    .grade-low {
+        background-color: rgba(231, 76, 60, 0.15);
+        color: #e74c3c;
+    }
+
+    @media (max-width: 768px) {
+        .performance-container {
+            padding: 1.5rem;
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+        }
+
+        .alert-buttons {
+            gap: 1rem;
+        }
+
+        .btn-alert {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+
+<div class="performance-container">
+    <h2 class="page-title">
+        <i class="fas fa-chart-line me-2"></i>Student Performance Summary
+    </h2>
 
     <!-- Alert Buttons -->
-    <div class="d-flex justify-content-center gap-3 mb-4">
+    <div class="alert-buttons">
         <form action="{{ url_for('teacher.send_low_grade_alerts') }}" method="post">
-            <button class="btn btn-warning" type="submit">Send Low Score Alerts</button>
+            <button class="btn-alert btn-low-grade" type="submit">
+                <i class="fas fa-exclamation-circle"></i> Low Score Alerts
+            </button>
         </form>
         <form action="{{ url_for('teacher.send_attendance_alerts') }}" method="post">
-            <button class="btn btn-warning" type="submit">Send Attendance Alerts</button>
+            <button class="btn-alert btn-attendance" type="submit">
+                <i class="fas fa-envelope"></i> Attendance Alerts
+            </button>
         </form>
     </div>
 
     <!-- Charts -->
-    <div class="row mb-4">
-        <div class="col-md-6">
-            <canvas id="gradeChart"></canvas>
+    <div class="row mb-4 g-4">
+        <div class="col-lg-6">
+            <div class="card-chart">
+                <div class="card-header">
+                    <i class="fas fa-chart-bar me-2"></i> Performance Categories
+                </div>
+                <div class="card-body">
+                    <canvas id="gradeChart" height="250"></canvas>
+                </div>
+            </div>
         </div>
-        <div class="col-md-6">
-            <canvas id="attendanceChart"></canvas>
+        <div class="col-lg-6">
+            <div class="card-chart">
+                <div class="card-header">
+                    <i class="fas fa-chart-pie me-2"></i> Attendance Breakdown
+                </div>
+                <div class="card-body">
+                    <canvas id="attendanceChart" height="250"></canvas>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Filters + Summary -->
-    <div class="row mb-4">
-        <div class="col-md-8">
-            <div class="d-flex gap-3">
-                <input type="text" id="studentNameFilter" class="form-control" placeholder="Search by student name">
-                <select id="gradeFilter" class="form-select w-auto">
-                    <option value="">All Grades</option>
-                    <option value="Excellent">Excellent</option>
-                    <option value="Good">Good</option>
-                    <option value="Average">Average</option>
-                    <option value="Low">Low</option>
-                </select>
+    <div class="row mb-4 g-4">
+        <div class="col-lg-8">
+            <div class="filter-card">
+                <div class="d-flex flex-column flex-md-row gap-3">
+                    <div class="flex-grow-1 position-relative">
+                        <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                        <input type="text" id="studentNameFilter" class="form-control ps-5" placeholder="Search by student name">
+                    </div>
+                    <select id="gradeFilter" class="form-select">
+                        <option value="">All Grades</option>
+                        <option value="excellent">Excellent</option>
+                        <option value="good">Good</option>
+                        <option value="average">Average</option>
+                        <option value="low">Low</option>
+                    </select>
+                </div>
             </div>
         </div>
-        <div class="col-md-4 mt-3 mt-md-0">
-            <div class="card">
-                <div class="card-header bg-primary text-white">Performance Summary</div>
+        <div class="col-lg-4">
+            <div class="summary-card">
+                <div class="summary-header">
+                    <i class="fas fa-chart-line me-2"></i> Performance Summary
+                </div>
                 <div class="card-body">
-                    <ul class="mb-0">
-                        <li><strong>Total Students:</strong> {{ performance_records|length }}</li>
-                        <li><strong>Low:</strong> {{ grade_counts['Low'] }}</li>
-                        <li><strong>Average:</strong> {{ grade_counts['Average'] }}</li>
-                        <li><strong>Good:</strong> {{ grade_counts['Good'] }}</li>
-                        <li><strong>Excellent:</strong> {{ grade_counts['Excellent'] }}</li>
+                    <ul class="summary-list">
+                        <li>
+                            <span>Total Students:</span>
+                            <strong>{{ performance_records|length }}</strong>
+                        </li>
+                        <li>
+                            <span class="text-danger">Low:</span>
+                            <strong>{{ grade_counts['Low'] }}</strong>
+                        </li>
+                        <li>
+                            <span class="text-warning">Average:</span>
+                            <strong>{{ grade_counts['Average'] }}</strong>
+                        </li>
+                        <li>
+                            <span class="text-primary">Good:</span>
+                            <strong>{{ grade_counts['Good'] }}</strong>
+                        </li>
+                        <li>
+                            <span class="text-success">Excellent:</span>
+                            <strong>{{ grade_counts['Excellent'] }}</strong>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -55,34 +363,44 @@
     </div>
 
     <!-- Performance Table -->
-    <h4 class="mt-5">Performance Table</h4>
-    <table class="table table-striped text-center">
-        <thead class="table-dark">
-            <tr>
-                <th>Name</th>
-                <th>Predicted Semester 3 Score</th>
-                <th>Attendance (%)</th>
-                <th>Grade</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for record in performance_records %}
-            <tr class="performance-row" data-name="{{ record.name | lower }}" data-grade="{{ record.grade | lower }}">
-                <td>{{ record.name }}</td>
-                <td>{{ record.score }}</td>
-                <td>{{ record.attendance }}</td>
-                <td>{{ record.grade }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="table-section">
+        <h4 class="table-title">
+            <i class="fas fa-table me-2"></i> Performance Details
+        </h4>
+        <div class="table-responsive performance-table">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Predicted Semester 3 Score</th>
+                        <th>Attendance (%)</th>
+                        <th>Grade</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in performance_records %}
+                    <tr class="performance-row" data-name="{{ record.name | lower }}" data-grade="{{ record.grade | lower }}">
+                        <td>{{ record.name }}</td>
+                        <td>{{ record.score }}</td>
+                        <td>{{ record.attendance }}</td>
+                        <td>
+                            <span class="grade-badge grade-{{ record.grade | lower }}">
+                                {{ record.grade }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    // Grade Chart
+    // Grade Distribution Chart
     const gradeCounts = {{ grade_counts | tojson }};
     const gradeCtx = document.getElementById('gradeChart').getContext('2d');
     new Chart(gradeCtx, {
@@ -90,80 +408,111 @@ document.addEventListener('DOMContentLoaded', () => {
         data: {
             labels: Object.keys(gradeCounts),
             datasets: [{
-                label: 'Performance Categories',
+                label: 'Number of Students',
                 data: Object.values(gradeCounts),
-                backgroundColor: ['#e74c3c', '#f39c12', '#3498db', '#2ecc71']
+                backgroundColor: [
+                    'rgba(231, 76, 60, 0.7)',
+                    'rgba(241, 196, 15, 0.7)',
+                    'rgba(52, 152, 219, 0.7)',
+                    'rgba(46, 204, 113, 0.7)'
+                ],
+                borderColor: [
+                    'rgba(231, 76, 60, 1)',
+                    'rgba(241, 196, 15, 1)',
+                    'rgba(52, 152, 219, 1)',
+                    'rgba(46, 204, 113, 1)'
+                ],
+                borderWidth: 1
             }]
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
-                title: {
-                    display: true,
-                    text: 'Performance Category Distribution'
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.parsed.y + ' students';
+                        }
+                    }
                 }
-            }
-        }
-    });
-
-    // Attendance Chart
-    const attendanceGroups = {{ attendance_groups | tojson }};
-    const attendanceCtx = document.getElementById('attendanceChart').getContext('2d');
-    new Chart(document.getElementById('attendanceChart').getContext('2d'), {
-    type: 'pie',
-    data: {
-        labels: ['Below 75%', '76-80%', '81-90%', '91-99%'],
-        datasets: [{
-            data: [
-                attendanceGroups['Below 75%'],
-                attendanceGroups['76-80%'],
-                attendanceGroups['81-90%'],
-                attendanceGroups['91-99%']
-            ],
-            backgroundColor: ['#FF0000', '#FF8000', '#00FF00', '#008000'],
-            borderColor: ['#FF0000', '#FF8000', '#00FF00', '#008000'],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            title: {
-                display: true,
-                text: 'Semester 3 Attendance Distribution'
             },
-            tooltip: {
-                callbacks: {
-                    label: function(tooltipItem) {
-                        return tooltipItem.label + ': ' + tooltipItem.raw + ' students';
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
                     }
                 }
             }
         }
-    }
-});
+    });
 
+    // Attendance Distribution Chart
+    const attendanceGroups = {{ attendance_groups | tojson }};
+    const attendanceCtx = document.getElementById('attendanceChart').getContext('2d');
+    new Chart(attendanceCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Below 75%', '76-80%', '81-90%', '91-99%'],
+            datasets: [{
+                data: [
+                    attendanceGroups['Below 75%'],
+                    attendanceGroups['76-80%'],
+                    attendanceGroups['81-90%'],
+                    attendanceGroups['91-99%']
+                ],
+                backgroundColor: [
+                    'rgba(231, 76, 60, 0.7)',
+                    'rgba(241, 196, 15, 0.7)',
+                    'rgba(52, 152, 219, 0.7)',
+                    'rgba(46, 204, 113, 0.7)'
+                ],
+                borderColor: [
+                    'rgba(231, 76, 60, 1)',
+                    'rgba(241, 196, 15, 1)',
+                    'rgba(52, 152, 219, 1)',
+                    'rgba(46, 204, 113, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'right',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.label + ': ' + context.raw + ' students';
+                        }
+                    }
+                }
+            },
+            cutout: '65%'
+        }
+    });
 
     // Filter Logic
-    document.getElementById('studentNameFilter').addEventListener('input', function () {
-        const term = this.value.toLowerCase();
-        document.querySelectorAll('.performance-row').forEach(row => {
-            const nameMatch = row.dataset.name.includes(term);
-            const grade = document.getElementById('gradeFilter').value.toLowerCase();
-            const gradeMatch = !grade || row.dataset.grade === grade;
-            row.style.display = (nameMatch && gradeMatch) ? '' : 'none';
-        });
-    });
+    function applyFilters() {
+        const nameTerm = document.getElementById('studentNameFilter').value.toLowerCase();
+        const gradeFilter = document.getElementById('gradeFilter').value.toLowerCase();
 
-    document.getElementById('gradeFilter').addEventListener('change', function () {
-        const grade = this.value.toLowerCase();
-        const term = document.getElementById('studentNameFilter').value.toLowerCase();
         document.querySelectorAll('.performance-row').forEach(row => {
-            const nameMatch = row.dataset.name.includes(term);
-            const gradeMatch = !grade || row.dataset.grade === grade;
+            const nameMatch = row.dataset.name.includes(nameTerm);
+            const gradeMatch = !gradeFilter || row.dataset.grade === gradeFilter;
             row.style.display = (nameMatch && gradeMatch) ? '' : 'none';
         });
-    });
+    }
+
+    document.getElementById('studentNameFilter').addEventListener('input', applyFilters);
+    document.getElementById('gradeFilter').addEventListener('change', applyFilters);
 });
 </script>
 {% endblock %}

@@ -4,35 +4,41 @@
 <!-- Link to the custom stylesheet -->
 <link rel="stylesheet" href="{{ url_for('static', filename='styles/add_student.css') }}">
 
-<div class="container mt-5">
+<div class="add-student-container container mt-5">
+  <div class="header-section text-center mb-4">
+    <h1 class="page-title">👨‍🎓 Add New Student</h1>
+    <p class="page-description text-muted">
+      Fill out the form below to register a new student in the system.
+    </p>
+  </div>
+
   <div class="row justify-content-center">
     <div class="col-md-8 col-lg-6">
-      <div class="card shadow">
-        <h2>Add New Student</h2>
+      <div class="card shadow-sm p-4 border-0 rounded-4">
         <form method="POST" action="{{ url_for('admin.add_student') }}">
           {{ form.hidden_tag() }}
           <div class="mb-3">
             {{ form.username.label(class_="form-label") }}
-            {{ form.username(class_="form-control") }}
+            {{ form.username(class_="form-control form-control-lg") }}
           </div>
           <div class="mb-3">
             {{ form.email.label(class_="form-label") }}
-            {{ form.email(class_="form-control") }}
+            {{ form.email(class_="form-control form-control-lg") }}
           </div>
           <div class="mb-3">
             {{ form.roll_no.label(class_="form-label") }}
-            {{ form.roll_no(class_="form-control") }}
+            {{ form.roll_no(class_="form-control form-control-lg") }}
           </div>
           <div class="mb-3">
             {{ form.phone.label(class_="form-label") }}
-            {{ form.phone(class_="form-control") }}
+            {{ form.phone(class_="form-control form-control-lg") }}
           </div>
           <div class="mb-4">
             {{ form.password.label(class_="form-label") }}
-            {{ form.password(class_="form-control") }}
+            {{ form.password(class_="form-control form-control-lg") }}
           </div>
           <div class="d-grid">
-            <input type="submit" value="Add Student" class="btn btn-primary">
+            <input type="submit" value="Add Student" class="btn btn-primary btn-lg rounded-pill">
           </div>
         </form>
       </div>

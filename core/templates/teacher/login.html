@@ -1,19 +1,24 @@
 <!-- templates/teacher/login.html -->
 {% extends 'base.html' %}
+
 {% block content %}
-<div class="container mt-4">
-    <h2>Teacher Login</h2>
-    <form method="POST" action="{{ url_for('teacher.teacher_login') }}">
-        {{ form.hidden_tag() }}
-        <div class="mb-3">
-            {{ form.email.label }}
-            {{ form.email(class="form-control") }}
-        </div>
-        <div class="mb-3">
-            {{ form.password.label }}
-            {{ form.password(class="form-control") }}
-        </div>
-        <button type="submit" class="btn btn-primary">Login</button>
-    </form>
+<div class="container d-flex justify-content-center align-items-center mt-5" style="min-height: 70vh;">
+    <div class="card shadow-lg p-4" style="width: 100%; max-width: 400px;">
+        <h3 class="text-center mb-4 text-primary">Teacher Login</h3>
+        <form method="POST" action="{{ url_for('teacher.teacher_login') }}">
+            {{ form.hidden_tag() }}
+            <div class="mb-3">
+                {{ form.email.label(class="form-label fw-semibold") }}
+                {{ form.email(class="form-control", placeholder="Enter your email") }}
+            </div>
+            <div class="mb-3">
+                {{ form.password.label(class="form-label fw-semibold") }}
+                {{ form.password(class="form-control", placeholder="Enter your password") }}
+            </div>
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary btn-block">Login</button>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}

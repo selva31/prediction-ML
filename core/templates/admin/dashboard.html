@@ -1,22 +1,443 @@
-<div class="mt-4">
-  <h4>Quick Links</h4>
-  <div class="list-group">
-    <a href="{{ url_for('admin.add_student') }}" class="list-group-item list-group-item-action py-3">
-      <i class="fas fa-user-plus me-2"></i> Add Student
-    </a>
-    <a href="{{ url_for('admin.add_teacher') }}" class="list-group-item list-group-item-action py-3">
-      <i class="fas fa-chalkboard-teacher me-2"></i> Add Teacher
-    </a>
-    <a href="{{ url_for('admin.view_students') }}" class="list-group-item list-group-item-action py-3">
-      <i class="fas fa-users me-2"></i> View Students
-    </a>
-    <a href="{{ url_for('admin.view_teachers') }}" class="list-group-item list-group-item-action py-3">
-      <i class="fas fa-user-tie me-2"></i> View Teachers
-    </a>
-    <a href="{{ url_for('admin.view_performance') }}" class="list-group-item list-group-item-action py-3">
-      <i class="fas fa-chart-line me-2"></i> View Performance
-    </a><a href="{{ url_for('admin.view_teacher') }}" class="list-group-item list-group-item-action py-3">
-      <i class="fas fa-chart-line me-2"></i> View Teacher
-    </a>
+<div class="admin-dashboard-container">
+  <!-- Welcome Section -->
+  <div class="welcome-section glassmorphism-card">
+    <div class="welcome-content">
+      <h1 class="welcome-title">Welcome back, <span class="text-gradient">Admin</span>!</h1>
+      <p class="welcome-subtitle">Here's what's happening with your institution today</p>
+<!--      <div class="current-info">-->
+<!--        <span class="date-badge"><i class="fas fa-calendar-alt"></i> {{ current_date }}</span>-->
+<!--        <span class="time-badge"><i class="fas fa-clock"></i> {{ current_time }}</span>-->
+<!--      </div>-->
+    </div>
+    <div class="welcome-illustration">
+      <i class="fas fa-chalkboard-teacher"></i>
+    </div>
+  </div>
+
+  <!-- Stats Section -->
+  <div class="dashboard-stats mb-4">
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="stat-card student-stat glassmorphism-card">
+          <div class="stat-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="stat-content">
+            <h3 class="stat-title">Total Students</h3>
+            <p class="stat-value">{{ total_students }}</p>
+<!--            <div class="stat-trend">-->
+<!--              <i class="fas fa-arrow-up"></i>-->
+<!--              <span class="trend-text">Active</span>-->
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="stat-card teacher-stat glassmorphism-card">
+          <div class="stat-icon">
+            <i class="fas fa-chalkboard-teacher"></i>
+          </div>
+          <div class="stat-content">
+            <h3 class="stat-title">Total Faculty</h3>
+            <p class="stat-value">{{ total_teachers }}</p>
+<!--            <div class="stat-trend">-->
+<!--              <i class="fas fa-arrow-up"></i>-->
+<!--              <span class="trend-text">Active</span>-->
+<!--            </div>-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Links Section -->
+  <div class="quick-links-section">
+    <div class="section-header">
+      <h4><i class="fas fa-link me-2"></i> Quick Navigation</h4>
+    </div>
+    <div class="quick-links-grid">
+      <a href="{{ url_for('admin.add_student') }}" class="quick-link-card glassmorphism-card">
+        <div class="link-icon student-icon">
+          <i class="fas fa-user-plus"></i>
+        </div>
+        <div class="link-content">
+          <h5>Add Student</h5>
+          <p>Register new students</p>
+        </div>
+        <i class="fas fa-chevron-right link-arrow"></i>
+      </a>
+
+      <a href="{{ url_for('admin.add_teacher') }}" class="quick-link-card glassmorphism-card">
+        <div class="link-icon teacher-icon">
+          <i class="fas fa-chalkboard-teacher"></i>
+        </div>
+        <div class="link-content">
+          <h5>Add Teacher</h5>
+          <p>Register new faculty</p>
+        </div>
+        <i class="fas fa-chevron-right link-arrow"></i>
+      </a>
+
+      <a href="{{ url_for('admin.view_student') }}" class="quick-link-card glassmorphism-card">
+        <div class="link-icon view-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="link-content">
+          <h5>Student Directory</h5>
+          <p>View all students</p>
+        </div>
+        <i class="fas fa-chevron-right link-arrow"></i>
+      </a>
+
+      <a href="{{ url_for('admin.view_teacher') }}" class="quick-link-card glassmorphism-card">
+        <div class="link-icon faculty-icon">
+          <i class="fas fa-user-tie"></i>
+        </div>
+        <div class="link-content">
+          <h5>Faculty Directory</h5>
+          <p>View all teachers</p>
+        </div>
+        <i class="fas fa-chevron-right link-arrow"></i>
+      </a>
+    </div>
   </div>
 </div>
+
+<style>
+  :root {
+    --primary: #4361ee;
+    --secondary: #3f37c9;
+    --accent: #4895ef;
+    --light: #f8f9fa;
+    --dark: #212529;
+    --success: #4cc9f0;
+    --danger: #f72585;
+    --glass-bg: rgba(255, 255, 255, 0.2);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .admin-dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: #f5f7fb;
+  }
+
+  /* Glassmorphism Effect */
+  .glassmorphism-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 9px;
+    border: var(--glass-border);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  /* Welcome Section */
+  .welcome-section {
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .welcome-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+  }
+
+  .welcome-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .text-gradient {
+    background: linear-gradient(90deg, #f72585, #4cc9f0);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .welcome-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .current-info {
+    display: flex;
+    gap: 1rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .date-badge, .time-badge {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    backdrop-filter: blur(5px);
+  }
+
+  .welcome-illustration i {
+    font-size: 5rem;
+    opacity: 0.1;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.5s ease;
+  }
+
+  .welcome-section:hover .welcome-illustration i {
+    transform: scale(1.1);
+  }
+
+  /* Stats Cards */
+  .stat-card {
+    padding: 1.75rem;
+    display: flex;
+    align-items: center;
+    height: 30%;
+    border-left: 4px solid transparent;
+  }
+
+  .student-stat {
+    border-left-color: var(--primary);
+  }
+
+  .teacher-stat {
+    border-left-color: var(--accent);
+  }
+
+  .stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+
+  .stat-icon {
+    font-size: 1.8rem;
+    width: 70px;
+    height: 70px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1.5rem;
+    flex-shrink: 0;
+    color: white;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+
+  .student-stat .stat-icon {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+  }
+
+  .teacher-stat .stat-icon {
+    background: linear-gradient(135deg, var(--accent), #3a86ff);
+  }
+
+  .stat-title {
+    font-size: 1rem;
+    color: #6c757d;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .stat-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+    line-height: 1;
+    font-feature-settings: "tnum";
+  }
+
+  .stat-trend {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .stat-trend i {
+    color: var(--success);
+    font-size: 0.9rem;
+  }
+
+  .trend-text {
+    font-size: 0.85rem;
+    color: #6c757d;
+    font-weight: 500;
+  }
+
+  /* Quick Links Section */
+  .quick-links-section {
+    margin-top: 3rem;
+  }
+
+  .section-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .section-header h4 {
+    font-weight: 600;
+    color: var(--dark);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    font-size: 1.25rem;
+  }
+
+  .section-header h4 i {
+    color: var(--primary);
+    margin-right: 0.75rem;
+  }
+
+  .quick-links-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .quick-link-card {
+    padding: 1.75rem;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    border-left: 4px solid transparent;
+  }
+
+  .quick-link-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+
+  .quick-link-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .quick-link-card:hover::before {
+    opacity: 1;
+  }
+
+  .link-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1.5rem;
+    font-size: 1.5rem;
+    color: white;
+    flex-shrink: 0;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+
+  .student-icon { background: linear-gradient(135deg, var(--primary), var(--secondary)); }
+  .teacher-icon { background: linear-gradient(135deg, #4cc9f0, #4895ef); }
+  .view-icon { background: linear-gradient(135deg, #7209b7, #560bad); }
+  .faculty-icon { background: linear-gradient(135deg, #f72585, #b5179e); }
+
+  .link-content h5 {
+    color: var(--dark);
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    font-size: 1.1rem;
+  }
+
+  .link-content p {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin: 0;
+  }
+
+  .link-arrow {
+    margin-left: auto;
+    color: #adb5bd;
+    font-size: 1rem;
+    transition: transform 0.3s ease;
+  }
+
+  .quick-link-card:hover .link-arrow {
+    transform: translateX(5px);
+    color: var(--primary);
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 992px) {
+    .welcome-section {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .current-info {
+      justify-content: center;
+    }
+
+    .welcome-illustration {
+      margin-top: 2rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .admin-dashboard-container {
+      padding: 1.5rem;
+    }
+
+    .welcome-title {
+      font-size: 1.8rem;
+    }
+
+    .stat-icon {
+      width: 60px;
+      height: 60px;
+      font-size: 1.5rem;
+      margin-right: 1.25rem;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+    }
+
+    .quick-links-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .link-icon {
+      width: 50px;
+      height: 50px;
+      font-size: 1.25rem;
+    }
+  }
+</style>

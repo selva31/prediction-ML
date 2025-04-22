@@ -106,21 +106,25 @@ def view_teacher():
     return render_template('admin/view_teacher.html', teachers=teachers)
 
 @admin_bp.route('/edit_teacher/<int:teacher_id>', methods=['GET', 'POST'])
+@login_required
 def edit_teacher(teacher_id):
-    teacher = Teacher.query.get_or_404(teacher_id)
+    teacher = User.query.get_or_404(teacher_id)
+
     if request.method == 'POST':
-        teacher.name = request.form['name']
+        teacher.username = request.form['username']
         teacher.email = request.form['email']
-        # teacher.phone = request.form['phone']
         db.session.commit()
-        flash('Teacher details updated successfully.', 'success')
+        flash("Teacher updated successfully", "success")
         return redirect(url_for('admin.view_teacher'))
-    return render_template('admin.edit_teacher.html', teacher=teacher)
+
+    return render_template('admin/edit_teacher.html', teacher=teacher)
+
+
 
 
 @admin_bp.route('/delete_teacher/<int:teacher_id>')
 def delete_teacher(teacher_id):
-    teacher = Teacher.query.get_or_404(teacher_id)
+    teacher = user.query.get_or_404(teacher_id)
     db.session.delete(teacher)
     db.session.commit()
     flash('Teacher deleted successfully.', 'success')
@@ -141,22 +145,25 @@ def view_student():
 
 
 # Edit Student
-@admin_bp.route('/edit_student/<int:student_id>', methods=['GET', 'POST'])
-@login_required
+@admin_bp.route('/admin/edit_student/<int:student_id>', methods=['GET', 'POST'])
 def edit_student(student_id):
-    if current_user.role != 'Admin':
-        return redirect(url_for('main.home'))  # Redirect non-admins
-
     student = User.query.get_or_404(student_id)
-    form = AddStudentForm(obj=student)
-    if form.validate_on_submit():
-        student.username = form.username.data
-        student.email = form.email.data
-        student.roll_no = form.roll_no.data
-        student.phone = form.phone.data
-        db.session.commit()
-        return redirect(url_for('admin.view_student'))
-    return render_template('admin/edit_student.html', form=form)
+    if request.method == 'POST':
+        student.username = request.form['username']
+        student.email = request.form['email']
+        student.roll_no = request.form['roll_no']
+        student.phone = request.form['phone']
+
+        try:
+            db.session.commit()
+            flash('Student details updated successfully!', 'success')
+            return redirect(url_for('admin.view_student'))
+        except Exception as e:
+            db.session.rollback()
+            flash('Error updating student: ' + str(e), 'danger')
+            return redirect(url_for('admin.view_student'))
+    return render_template('admin/edit_student.html', student=student)
+
 
 # Delete Student
 @admin_bp.route('/delete_student/<int:student_id>', methods=['GET'])

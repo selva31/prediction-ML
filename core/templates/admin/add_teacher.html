@@ -1,24 +1,40 @@
-<!-- templates/admin/add_teacher.html -->
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2>Add Teacher</h2>
-    <form method="POST" action="{{ url_for('admin.add_teacher') }}">
-        {{ form.hidden_tag() }}
-        <div class="mb-3">
-            {{ form.username.label }}
-            {{ form.username(class="form-control") }}
+<!-- Link to the custom stylesheet -->
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/add_teacher.css') }}">
+
+<div class="add-teacher-container container mt-5">
+    <div class="header-section text-center mb-4">
+        <h1 class="page-title">📘 Add New Teacher</h1>
+        <p class="page-description text-muted">
+            Use this form to add a new teacher to the system.
+        </p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm p-4 border-0 rounded-4">
+                <form method="POST" action="{{ url_for('admin.add_teacher') }}">
+                    {{ form.hidden_tag() }}
+                    <div class="mb-3">
+                        {{ form.username.label(class_="form-label") }}
+                        {{ form.username(class_="form-control form-control-lg") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.email.label(class_="form-label") }}
+                        {{ form.email(class_="form-control form-control-lg") }}
+                    </div>
+                    <div class="mb-4">
+                        {{ form.password.label(class_="form-label") }}
+                        {{ form.password(class_="form-control form-control-lg") }}
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success btn-lg rounded-pill">Add Teacher</button>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="mb-3">
-            {{ form.email.label }}
-            {{ form.email(class="form-control") }}
-        </div>
-        <div class="mb-3">
-            {{ form.password.label }}
-            {{ form.password(class="form-control") }}
-        </div>
-        <button type="submit" class="btn btn-primary">Add Teacher</button>
-    </form>
+    </div>
 </div>
 {% endblock %}

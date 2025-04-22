@@ -1,31 +1,56 @@
-<!-- templates/admin/view_students.html -->
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Students List</h2>
+<!-- Link to the custom stylesheet -->
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/view_students.css') }}">
 
-<!-- Search form -->
-<form method="POST" action="{{ url_for('admin.view_student') }}">
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="title">🎓 Students List</h2>
+  </div>
+
+  <!-- Search form -->
+  <form method="POST" action="{{ url_for('admin.view_student') }}" class="row g-2 mb-4">
     {{ form.hidden_tag() }}
-    <p>{{ form.search_query.label }} {{ form.search_query() }}</p>
-    <p><input type="submit" value="Search"></p>
-</form>
+    <div class="col-md-10">
+      {{ form.search_query(class_="form-control", placeholder="Search by name, email, or roll number...") }}
+    </div>
+    <div class="col-md-2">
+      <input type="submit" value="Search" class="btn btn-primary w-100">
+    </div>
+  </form>
 
-<!-- Display student data in a table -->
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Email</th>
-    <th>Roll Number</th>
-    <th>Phone</th>
-  </tr>
-  {% for student in students %}
-  <tr>
-    <td>{{ student.username }}</td>
-    <td>{{ student.email }}</td>
-    <td>{{ student.roll_no }}</td>
-    <td>{{ student.phone }}</td>
-  </tr>
-  {% endfor %}
-</table>
+  <!-- Student table -->
+  <div class="table-responsive">
+    <table class="table table-hover table-striped align-middle shadow-sm rounded">
+      <thead class="table-dark">
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Roll Number</th>
+          <th>Phone</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for student in students %}
+        <tr>
+          <td>{{ student.username }}</td>
+          <td>{{ student.email }}</td>
+          <td>{{ student.roll_no }}</td>
+          <td>{{ student.phone }}</td>
+          <td>
+            <a href="{{ url_for('admin.edit_student', student_id=student.id) }}" class="btn btn-sm btn-outline-warning me-1">Edit</a>
+            <a href="{{ url_for('admin.delete_student', student_id=student.id) }}"
+               class="btn btn-sm btn-outline-danger"
+               onclick="return confirm('Are you sure you want to delete the student {{ student.username}}?')">
+               Delete
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
 {% endblock %}

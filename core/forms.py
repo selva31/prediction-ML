@@ -23,3 +23,8 @@ class LoginForm(FlaskForm):
 class SearchForm(FlaskForm):
     search_query = StringField('Search Students', validators=[InputRequired()])
     submit = SubmitField('Search')
+
+class EditTeacherForm(FlaskForm):
+    username = StringField('Name', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Update')
