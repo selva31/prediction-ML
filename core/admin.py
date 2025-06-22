@@ -124,7 +124,7 @@ def edit_teacher(teacher_id):
 
 @admin_bp.route('/delete_teacher/<int:teacher_id>')
 def delete_teacher(teacher_id):
-    teacher = user.query.get_or_404(teacher_id)
+    teacher = User.query.get_or_404(teacher_id)
     db.session.delete(teacher)
     db.session.commit()
     flash('Teacher deleted successfully.', 'success')
@@ -173,9 +173,21 @@ def delete_student(student_id):
         return redirect(url_for('main.home'))  # Redirect non-admins
 
     student = User.query.get_or_404(student_id)
+
+    # First delete associated performance records
+    from core.models import PerformanceRecord, Performance, StudentDetail
+
+    PerformanceRecord.query.filter_by(student_id=student.id).delete()
+    Performance.query.filter_by(student_id=student.id).delete()
+    StudentDetail.query.filter_by(user_id=student.id).delete()
+
+    # Now delete the student
     db.session.delete(student)
     db.session.commit()
+
+    flash('Student detail  deleted successfully.')
     return redirect(url_for('admin.view_student'))
+
 
 # View Performance
 @admin_bp.route('/view_performance')
